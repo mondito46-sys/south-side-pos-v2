@@ -1,0 +1,1 @@
+Versi POS dengan UI lebih clean/premium. Sistem database tetap sama.

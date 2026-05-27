@@ -1,0 +1,28 @@
+CARA PAKAI POS AUTO STOCK + RECIPE
+
+Fitur:
+- HPP menu input manual di Menu & HPP
+- Resep/takaran menu di Recipe Manager
+- Checkout POS otomatis potong stok
+- Riwayat pemakaian stok masuk ke stock_moves
+- Tetap pakai Supabase yang sama
+
+Setup:
+1. Buka Supabase project yang sama.
+2. SQL Editor > New Query.
+3. Copy isi AUTO_STOCK_SQL_SETUP.sql.
+4. RUN.
+5. Upload folder ini ke Netlify menggantikan POS lama / sebagai POS baru.
+6. Buka web.
+7. Klik Kelola Menu & Resep.
+8. Isi HPP tiap menu.
+9. Masuk tab Resep / Takaran:
+   contoh Havana Latte:
+   - Beans Coffee 18 gram
+   - Susu UHT 150 ml
+   - Cup 12oz 1 pcs
+10. Checkout di POS, stok otomatis kepotong.
+
+Catatan penting:
+- Kalau transaksi salah dihapus, stok tidak otomatis balik. Balikin stok manual di Stock Management.
+- Pastikan nama bahan sudah ada di Stock Management.

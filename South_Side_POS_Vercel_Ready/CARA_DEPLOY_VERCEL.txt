@@ -1,0 +1,19 @@
+CARA DEPLOY SOUTH SIDE POS KE VERCEL
+
+1. Extract ZIP ini.
+2. Buka https://vercel.com
+3. Login pakai Google.
+4. Upload/import project ini.
+5. Framework Preset pilih Other.
+6. Build Command kosongkan.
+7. Output Directory kosongkan atau isi titik .
+8. Klik Deploy.
+
+CATATAN:
+- Supabase database tetap sama, jadi data POS lama aman.
+- File supabase-config.js sudah ikut.
+- Kalau web sudah online dan status Supabase tersambung, berarti sukses.
+
+HASIL:
+Link akan jadi seperti:
+https://south-side-pos.vercel.app

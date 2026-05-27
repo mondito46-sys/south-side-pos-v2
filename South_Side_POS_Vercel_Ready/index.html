@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South Side POS Auto Stock</title>
+  <style>
+
+*{box-sizing:border-box}
+:root{
+  --bg:#050505;
+  --card:#101010;
+  --card2:#151515;
+  --line:#2f2f2f;
+  --line2:#444;
+  --text:#f8f8f8;
+  --muted:#aaa;
+  --white:#fff;
+  --red:#ffb0b0;
+  --green:#b8ffd0;
+}
+body{
+  margin:0;
+  background:#000;
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+.app{
+  min-height:100vh;
+  padding:18px;
+  background:
+    radial-gradient(circle at top left,rgba(255,255,255,.06),transparent 26%),
+    linear-gradient(180deg,#090909,#000);
+}
+.container{max-width:1440px;margin:auto}
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:16px;
+}
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.s-logo{
+  width:76px;
+  height:76px;
+  border-radius:22px;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Impact, Arial Black, sans-serif;
+  font-size:58px;
+  font-weight:900;
+  letter-spacing:-8px;
+  transform:skew(-8deg);
+  box-shadow:0 16px 50px rgba(255,255,255,.1);
+}
+.s-logo::after{
+  content:"";
+  width:18px;
+  height:76px;
+  background:#000;
+  transform:rotate(33deg);
+  position:absolute;
+  border-radius:20px;
+  opacity:.98;
+}
+.logo-text{position:relative}
+.tag{
+  color:#ddd;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  font-size:11px;
+  font-weight:900;
+}
+h1{
+  margin:4px 0 6px;
+  font-size:42px;
+  line-height:1;
+  font-family:Impact, Arial Black, sans-serif;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+}
+h2{
+  margin:0;
+  font-size:26px;
+  font-family:Arial Black, Arial, sans-serif;
+}
+.muted{color:var(--muted)}
+.online{color:var(--green);font-weight:900}.offline{color:#ddd;font-weight:900}
+.brand{
+  border:1px solid #fff;
+  border-radius:999px;
+  padding:13px 18px;
+  font-weight:900;
+  letter-spacing:.12em;
+  white-space:nowrap;
+  background:#000;
+}
+.top-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.card,.brand{
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+.card{
+  background:linear-gradient(180deg,#121212,#080808);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:14px;
+}
+.stat{
+  min-height:104px;
+}
+.stat span{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+.stat b{
+  display:block;
+  margin-top:10px;
+  font-size:26px;
+  font-family:Arial Black, Arial, sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) 430px;
+  gap:14px;
+  align-items:start;
+}
+.filters{
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:10px;
+  margin-bottom:14px;
+}
+input,select,textarea{
+  width:100%;
+  background:#050505;
+  border:1px solid var(--line2);
+  color:#fff;
+  border-radius:14px;
+  padding:13px 14px;
+  outline:none;
+  font-size:15px;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#fff;
+  box-shadow:0 0 0 3px rgba(255,255,255,.12);
+}
+button{
+  cursor:pointer;
+  transition:.15s;
+}
+button:hover{opacity:.88}
+.mainbtn,.checkout,.smallbtn{
+  background:#fff;
+  color:#000;
+  border:0;
+  border-radius:14px;
+  padding:12px 14px;
+  font-weight:900;
+}
+.outlinebtn,.print{
+  background:#0b0b0b;
+  color:#fff;
+  border:1px solid var(--line2);
+  border-radius:14px;
+  padding:12px 14px;
+  font-weight:900;
+}
+.menu{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.menu-card{
+  background:#090909;
+  color:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  text-align:left;
+  min-height:132px;
+  position:relative;
+}
+.menu-card:hover{
+  border-color:#fff;
+}
+.menu-card::after{
+  content:"S";
+  position:absolute;
+  right:14px;
+  bottom:8px;
+  color:rgba(255,255,255,.04);
+  font-family:Impact, Arial Black, sans-serif;
+  font-size:66px;
+  transform:skew(-8deg);
+}
+.cat{
+  color:#bdbdbd;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  font-weight:900;
+}
+.name{
+  margin:12px 0 20px;
+  font-size:22px;
+  line-height:1.1;
+  font-family:Arial Black, Arial, sans-serif;
+}
+.price{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:2;
+  font-weight:900;
+}
+.plus{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  color:#000;
+  font-size:24px;
+}
+.order{
+  position:sticky;
+  top:14px;
+}
+.cart-item{
+  background:#080808;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:10px;
+}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.trash{
+  background:transparent;
+  border:0;
+  color:var(--red);
+  font-weight:900;
+}
+.addon-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:10px 0;
+}
+.addon,.pay{
+  background:#0b0b0b;
+  color:#eee;
+  border:1px solid var(--line2);
+  border-radius:999px;
+  padding:8px 10px;
+  font-weight:800;
+}
+.addon.active,.pay.active{
+  background:#fff;
+  color:#000;
+  border-color:#fff;
+}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  border:1px solid var(--line2);
+  background:#111;
+  color:#fff;
+  font-weight:900;
+}
+.payment{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:12px 0;
+}
+#cashBox{
+  background:#070707;
+  border:1px dashed var(--line2);
+  border-radius:16px;
+  padding:12px;
+}
+.summary{
+  border-top:1px solid var(--line);
+  padding-top:12px;
+  margin-top:12px;
+}
+.summary .total{
+  margin-top:8px;
+  font-size:28px;
+  font-family:Arial Black, Arial, sans-serif;
+}
+.checkout{
+  width:100%;
+  font-size:18px;
+  padding:16px;
+  margin-top:14px;
+}
+.print{width:100%;margin-top:8px}
+.empty{
+  border:1px dashed var(--line2);
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+  color:var(--muted);
+}
+.manager,.recap{margin-top:14px}
+.manager{display:none}
+.manager.show{display:block}
+.manager-head,.recap-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.notice{
+  background:#090909;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  color:#ccc;
+  margin-bottom:12px;
+}
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+.tab{
+  background:#0b0b0b;
+  color:#fff;
+  border:1px solid var(--line2);
+  border-radius:999px;
+  padding:10px 14px;
+  font-weight:900;
+}
+.tab.active{background:#fff;color:#000}
+.form-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr .7fr .7fr auto;
+  gap:8px;
+  padding:12px;
+  border:1px dashed var(--line2);
+  border-radius:16px;
+  margin-bottom:12px;
+}
+.recipe-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 160px auto;
+  gap:8px;
+  margin-bottom:12px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  border-bottom:1px solid rgba(255,255,255,.1);
+  padding:10px;
+  text-align:left;
+  vertical-align:top;
+}
+th{
+  color:#aaa;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.deletebtn{
+  background:#120707;
+  color:var(--red);
+  border:1px solid #5a2929;
+  border-radius:999px;
+  padding:8px 12px;
+  font-weight:900;
+}
+.pill{
+  display:inline-block;
+  border:1px solid var(--line2);
+  border-radius:999px;
+  padding:5px 9px;
+  margin:2px;
+  color:#ddd;
+  font-size:12px;
+}
+@media(max-width:1100px){
+  .grid{grid-template-columns:1fr}
+  .order{position:static}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:760px){
+  .app{padding:10px}
+  .header{align-items:flex-start;flex-direction:column}
+  .brand{white-space:normal}
+  .menu,.stats,.filters,.form-grid,.recipe-grid{grid-template-columns:1fr}
+  .s-logo{width:62px;height:62px;font-size:48px}
+  h1{font-size:34px}
+}
+
+</style>
+</head>
+<body>
+<div class="app"><div class="container">
+  <div class="header">
+    <div class="logo-wrap"><div class="s-logo">S</div><div class="logo-text"><div class="tag">your 2am addiction</div><h1>South Side POS</h1>
+      <div class="muted">HPP Manual + Recipe Auto Stock • <span id="cloudStatus" class="offline">Supabase belum tersambung</span></div>
+      <div class="top-actions">
+        <button class="mainbtn" id="toggleManagerBtn">Kelola Menu & Resep</button>
+        <button class="outlinebtn" id="hideManagerBtn">Tutup Manager</button>
+        <button class="outlinebtn" id="seedBtn">Upload Menu Default</button>
+      </div>
+      </div>
+    </div>
+    <div class="brand">SOUTH SIDE POS</div>
+  </div>
+
+  <div class="card" id="setupBox" style="margin-bottom:16px"><h2>Setup</h2><div class="notice">Jalankan SQL <b>AUTO_STOCK_SQL_SETUP.sql</b> di Supabase dulu, lalu upload web ini ke Netlify.</div></div>
+
+  <div class="card" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <b>Filter Rekap Tanggal:</b><input id="selectedDate" type="date" style="max-width:220px"><button class="mainbtn" id="todayBtn">Hari Ini</button>
+    <span class="muted">Checkout otomatis potong stok sesuai resep.</span>
+  </div>
+
+  <div class="stats">
+    <div class="card stat"><span>Omzet</span><b id="statOmzet">Rp0</b></div>
+    <div class="card stat"><span>Cup</span><b id="statCup">0 Cup</b></div>
+    <div class="card stat"><span>Profit HPP Manual</span><b id="statProfit">Rp0</b></div>
+    <div class="card stat"><span>Menu Terlaris</span><b id="statBest">Belum ada</b></div>
+  </div>
+
+  <div class="card manager" id="managerBox">
+    <div class="manager-head"><h2>Menu & Recipe Manager</h2></div>
+    <div class="notice">HPP menu diinput manual di menu. Resep dipakai untuk potong stok otomatis saat checkout.</div>
+    <div class="tabs">
+      <button class="tab active" id="tabMenu">Menu & HPP</button>
+      <button class="tab" id="tabRecipe">Resep / Takaran</button>
+    </div>
+
+    <div id="menuPanel">
+      <div class="form-grid">
+        <input id="menuNameInput" placeholder="Nama menu">
+        <input id="menuCategoryInput" placeholder="Kategori">
+        <input id="menuPriceInput" type="number" placeholder="Harga jual">
+        <input id="menuHppInput" type="number" placeholder="HPP manual">
+        <button class="mainbtn" id="addMenuBtn">Tambah Menu</button>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Menu</th><th>Kategori</th><th>Harga</th><th>HPP</th><th>Profit/Cup</th><th>Aksi</th></tr></thead><tbody id="menuManagerTable"></tbody></table></div>
+    </div>
+
+    <div id="recipePanel" style="display:none">
+      <div class="recipe-grid">
+        <select id="recipeMenuSelect"></select>
+        <select id="recipeStockSelect"></select>
+        <input id="recipeQtyInput" type="number" step="0.01" placeholder="Qty per cup">
+        <button class="mainbtn" id="addRecipeBtn">Tambah Resep</button>
+      </div>
+      <div class="notice">Contoh: Havana Latte → Beans 18 gram, Susu 150 ml, Cup 1 pcs. Setelah checkout, stok otomatis berkurang sesuai qty cup.</div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Menu</th><th>Bahan</th><th>Qty/Cup</th><th>Satuan</th><th>Aksi</th></tr></thead><tbody id="recipeTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="filters"><input id="search" placeholder="Cari menu..."><select id="category"></select></div>
+      <div id="menu" class="menu"></div>
+    </div>
+    <div class="card order">
+      <div class="row"><h2>Order</h2><b>New</b></div>
+      <div id="cart" style="margin-top:14px"></div>
+      <div class="payment"><button id="payQRIS" class="pay active">QRIS</button><button id="payCash" class="pay">Cash</button></div>
+<div id="cashBox" style="display:none;margin-top:10px">
+<input id="cashPaidInput" type="number" placeholder="Uang dibayar customer">
+<div class="row" style="margin-top:10px"><span class="muted">Kembalian</span><b id="changeAmount">Rp0</b></div>
+</div>
+      <div class="summary"><div class="row muted"><span>Profit estimasi</span><b id="cartProfit">Rp0</b></div><div class="row total"><span>Total</span><b id="cartTotal">Rp0</b></div></div>
+      <button class="checkout" id="checkoutBtn">Checkout + Potong Stok</button>
+      <button class="print" id="printLastBtn">Print Struk Terakhir</button>
+    </div>
+  </div>
+
+  <div class="card recap">
+    <div class="recap-head"><h2>Rekap Order Tanggal Dipilih</h2><div><button class="smallbtn" id="exportBtn">Export CSV</button><button class="smallbtn" id="resetDateBtn">Reset Tanggal Ini</button></div></div>
+    <div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Jam</th><th>Cup</th><th>Payment</th><th>Total</th><th>Profit</th><th>Struk</th><th>Hapus</th></tr></thead><tbody id="recap"></tbody></table></div>
+  </div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script>
+<script>
+const defaultMenuItems = [
+  {name:"Havana Latte",category:"Coffee Milk Based",price:15000,hpp:7000},
+  {name:"Butter Nova",category:"Coffee Milk Based",price:15000,hpp:7500},
+  {name:"Terra Palm",category:"Coffee Milk Based",price:15000,hpp:7000},
+  {name:"Obsidian Mocha",category:"Coffee Milk Based",price:16000,hpp:8000},
+  {name:"Black Orbit",category:"Americano Series",price:10000,hpp:4500},
+  {name:"Berrycano",category:"Americano Series",price:13000,hpp:5500},
+  {name:"Honey Peachcano",category:"Americano Series",price:13000,hpp:5500},
+  {name:"Scarlet Rush",category:"Signature",price:17000,hpp:8500},
+  {name:"Matcha Mirage",category:"Matcha & Chocolate",price:15000,hpp:8000},
+  {name:"Choco Noir",category:"Matcha & Chocolate",price:15000,hpp:7500}
+];
+const addons = [
+  {id:"extra-shot",name:"Extra Shot",price:3000},
+  {id:"berry",name:"Syrup Berry",price:3000},
+  {id:"peach",name:"Syrup Peach",price:3000},
+  {id:"butterscotch",name:"Butterscotch",price:3000},
+  {id:"water",name:"Air Putih Es",price:2000}
+];
+let supabaseClient=null, menuItems=[], stockItems=[], recipes=[], orders=[], cart=[], payment="QRIS", lastOrder=null;
+
+function byId(id){return document.getElementById(id)}
+function rupiah(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",minimumFractionDigits:0}).format(Number(n)||0)}
+function today(){return new Date().toISOString().slice(0,10)}
+function shortId(id){return id ? "SS-"+String(id).slice(0,5).toUpperCase() : "SS"}
+
+async function initSupabase(){
+  try{
+    if(!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY || window.SUPABASE_URL.includes("ISI_")) throw new Error("config kosong");
+    supabaseClient=supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);
+    byId("cloudStatus").textContent="Supabase tersambung"; byId("cloudStatus").className="online"; byId("setupBox").style.display="none";
+    await loadAll(); subscribeRealtime();
+  }catch(e){console.warn(e); byId("cloudStatus").textContent="Supabase belum tersambung"; byId("cloudStatus").className="offline"; menuItems=defaultMenuItems.map((m,i)=>({...m,id:i+1})); refreshAll();}
+}
+async function loadAll(){
+  const [m,s,r,o]=await Promise.all([
+    supabaseClient.from("menus").select("*").order("name"),
+    supabaseClient.from("stock_items").select("*").order("name"),
+    supabaseClient.from("menu_recipes").select("*"),
+    supabaseClient.from("orders").select("*").order("created_at",{ascending:false})
+  ]);
+  if(m.error) throw m.error; if(s.error) throw s.error; if(r.error) throw r.error; if(o.error) throw o.error;
+  menuItems=m.data||[]; stockItems=s.data||[]; recipes=r.data||[]; orders=o.data||[]; refreshAll();
+}
+function subscribeRealtime(){
+  supabaseClient.channel("pos-auto-stock")
+    .on("postgres_changes",{event:"*",schema:"public",table:"menus"},()=>loadAll())
+    .on("postgres_changes",{event:"*",schema:"public",table:"stock_items"},()=>loadAll())
+    .on("postgres_changes",{event:"*",schema:"public",table:"menu_recipes"},()=>loadAll())
+    .on("postgres_changes",{event:"*",schema:"public",table:"orders"},()=>loadAll())
+    .subscribe();
+}
+function setup(){
+  byId("selectedDate").value=today();
+  byId("selectedDate").addEventListener("change",()=>{renderStats();renderRecap()});
+  byId("todayBtn").addEventListener("click",()=>{byId("selectedDate").value=today();renderStats();renderRecap()});
+  byId("search").addEventListener("input",renderMenu); byId("category").addEventListener("change",renderMenu);
+  byId("payQRIS").addEventListener("click",()=>setPayment("QRIS")); byId("payCash").addEventListener("click",()=>setPayment("Cash")); byId("cashPaidInput").addEventListener("input",renderCart);
+  byId("checkoutBtn").addEventListener("click",checkout); byId("printLastBtn").addEventListener("click",printLast);
+  byId("exportBtn").addEventListener("click",exportCSV); byId("resetDateBtn").addEventListener("click",resetSelectedDateOrders);
+  byId("toggleManagerBtn").addEventListener("click",()=>{byId("managerBox").classList.add("show"); renderManagers()});
+  byId("hideManagerBtn").addEventListener("click",()=>byId("managerBox").classList.remove("show"));
+  byId("tabMenu").addEventListener("click",()=>setTab("menu")); byId("tabRecipe").addEventListener("click",()=>setTab("recipe"));
+  byId("addMenuBtn").addEventListener("click",addNewMenu); byId("seedBtn").addEventListener("click",seedDefaultMenu); byId("addRecipeBtn").addEventListener("click",addRecipe);
+  initSupabase();
+}
+function setTab(t){byId("tabMenu").classList.toggle("active",t==="menu");byId("tabRecipe").classList.toggle("active",t==="recipe");byId("menuPanel").style.display=t==="menu"?"block":"none";byId("recipePanel").style.display=t==="recipe"?"block":"none";}
+function refreshAll(){renderCategoryOptions();renderMenu();renderManagers();renderCart();renderStats();renderRecap();}
+function renderCategoryOptions(){const cats=["All"].concat([...new Set(menuItems.map(x=>x.category||"Lainnya"))]);const cur=byId("category").value||"All";byId("category").innerHTML=cats.map(c=>"<option>"+c+"</option>").join("");if(cats.includes(cur))byId("category").value=cur;}
+function renderMenu(){const s=byId("search").value.toLowerCase();const c=byId("category").value;const items=menuItems.filter(i=>i.name.toLowerCase().includes(s)&&(c==="All"||i.category===c));const el=byId("menu");el.innerHTML="";if(!items.length){el.innerHTML='<div class="empty">Menu kosong.</div>';return}items.forEach(item=>{const b=document.createElement("button");b.className="menu-card";b.innerHTML='<div class="cat">'+item.category+'</div><div class="name">'+item.name+'</div><div class="price"><span>'+rupiah(item.price)+'</span><span class="plus">+</span></div>';b.addEventListener("click",()=>addToCart(item));el.appendChild(b);});}
+function renderManagers(){renderMenuManager();renderRecipeSelects();renderRecipeTable();}
+function renderMenuManager(){const tb=byId("menuManagerTable");if(!tb)return;tb.innerHTML="";menuItems.forEach(item=>{const tr=document.createElement("tr");tr.innerHTML=`<td><input value="${esc(item.name)}" data-field="name"></td><td><input value="${esc(item.category)}" data-field="category"></td><td><input type="number" value="${item.price}" data-field="price"></td><td><input type="number" value="${item.hpp||0}" data-field="hpp"></td><td>${rupiah(Number(item.price)-Number(item.hpp||0))}</td><td><button class="smallbtn update">Update</button> <button class="deletebtn del">Hapus</button></td>`;tr.querySelector(".update").onclick=async()=>{const u={};tr.querySelectorAll("input").forEach(inp=>{const f=inp.dataset.field;u[f]=(f==="price"||f==="hpp")?Number(inp.value||0):inp.value.trim()});if(!u.name||!u.price)return alert("Nama & harga wajib");const {error}=await supabaseClient.from("menus").update(u).eq("id",item.id);if(error)alert(error.message)};tr.querySelector(".del").onclick=async()=>{if(confirm("Hapus menu?")){await supabaseClient.from("menu_recipes").delete().eq("menu_id",item.id);const {error}=await supabaseClient.from("menus").delete().eq("id",item.id);if(error)alert(error.message)}};tb.appendChild(tr);});}
+function renderRecipeSelects(){byId("recipeMenuSelect").innerHTML=menuItems.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("");byId("recipeStockSelect").innerHTML=stockItems.map(s=>`<option value="${s.id}">${esc(s.name)} (${esc(s.unit)})</option>`).join("");}
+function renderRecipeTable(){const tb=byId("recipeTable");tb.innerHTML="";recipes.forEach(rec=>{const m=menuItems.find(x=>x.id==rec.menu_id), st=stockItems.find(x=>x.id==rec.stock_item_id);const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(m?.name||"-")}</td><td>${esc(st?.name||"-")}</td><td>${Number(rec.qty_per_cup)}</td><td>${esc(st?.unit||"")}</td><td><button class="deletebtn">Hapus</button></td>`;tr.querySelector("button").onclick=async()=>{const {error}=await supabaseClient.from("menu_recipes").delete().eq("id",rec.id);if(error)alert(error.message)};tb.appendChild(tr);});}
+async function addRecipe(){if(!supabaseClient)return alert("Supabase belum tersambung");const menu_id=Number(byId("recipeMenuSelect").value), stock_item_id=Number(byId("recipeStockSelect").value), qty_per_cup=Number(byId("recipeQtyInput").value);if(!menu_id||!stock_item_id||!qty_per_cup)return alert("Isi menu, bahan, dan qty");const {error}=await supabaseClient.from("menu_recipes").insert([{menu_id,stock_item_id,qty_per_cup}]);if(error)return alert(error.message);byId("recipeQtyInput").value="";}
+async function addNewMenu(){const name=byId("menuNameInput").value.trim(),category=byId("menuCategoryInput").value.trim()||"Lainnya",price=Number(byId("menuPriceInput").value),hpp=Number(byId("menuHppInput").value||0);if(!name||!price)return alert("Nama & harga wajib");const {error}=await supabaseClient.from("menus").insert([{name,category,price,hpp}]);if(error)return alert(error.message);["menuNameInput","menuCategoryInput","menuPriceInput","menuHppInput"].forEach(id=>byId(id).value="");}
+async function seedDefaultMenu(){if(!supabaseClient)return alert("Supabase belum tersambung");if(!confirm("Upload menu default?"))return;const {error}=await supabaseClient.from("menus").insert(defaultMenuItems);if(error)alert(error.message);}
+function esc(t){return String(t??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+function addToCart(item){cart.push({...item,key:String(Date.now())+Math.random(),qty:1,selectedAddons:[]});renderCart();}
+function removeItem(k){cart=cart.filter(i=>i.key!==k);renderCart()}function qty(k,d){cart=cart.map(i=>i.key===k?{...i,qty:Math.max(1,i.qty+d)}:i);renderCart()}
+function toggleAddon(k,aid){const a=addons.find(x=>x.id===aid);cart=cart.map(i=>{if(i.key!==k)return i;const ex=i.selectedAddons.some(x=>x.id===aid);return {...i,selectedAddons:ex?i.selectedAddons.filter(x=>x.id!==aid):i.selectedAddons.concat([a])}});renderCart()}
+function totals(){let total=0,profit=0,cups=0;cart.forEach(i=>{const add=i.selectedAddons.reduce((a,b)=>a+b.price,0);total+=(Number(i.price)+add)*i.qty;profit+=(Number(i.price)+add-Number(i.hpp||0))*i.qty;cups+=i.qty});return{total,profit,cups}}
+function renderCart(){const el=byId("cart");
+const cashBox = byId("cashBox");
+if(payment==="Cash"){cashBox.style.display="block"}else{cashBox.style.display="none";byId("cashPaidInput").value=""}
+if(!cart.length){el.innerHTML='<div class="empty">Belum ada order.</div>'}else{el.innerHTML="";cart.forEach(i=>{const add=i.selectedAddons.reduce((a,b)=>a+b.price,0);const div=document.createElement("div");div.className="cart-item";div.innerHTML='<div class="row"><div><b>'+i.name+'</b><p class="muted">'+rupiah(i.price)+' • HPP '+rupiah(i.hpp||0)+'</p></div><button class="trash">Hapus</button></div>';div.querySelector(".trash").onclick=()=>removeItem(i.key);const aw=document.createElement("div");aw.className="addon-wrap";addons.forEach(a=>{const b=document.createElement("button");b.className="addon"+(i.selectedAddons.some(x=>x.id===a.id)?" active":"");b.textContent=a.name;b.onclick=()=>toggleAddon(i.key,a.id);aw.appendChild(b)});div.appendChild(aw);const qr=document.createElement("div");qr.className="row";qr.innerHTML='<div class="qty"><button class="minus">-</button><b>'+i.qty+'</b><button class="plusqty">+</button></div><b>'+rupiah((Number(i.price)+add)*i.qty)+'</b>';qr.querySelector(".minus").onclick=()=>qty(i.key,-1);qr.querySelector(".plusqty").onclick=()=>qty(i.key,1);div.appendChild(qr);el.appendChild(div)})}const t=totals();
+byId("cartTotal").textContent=rupiah(t.total);
+byId("cartProfit").textContent=rupiah(t.profit);
+const paid = Number(byId("cashPaidInput")?.value||0);
+const change = payment==="Cash" ? Math.max(0, paid - t.total) : 0;
+if(byId("changeAmount")) byId("changeAmount").textContent = rupiah(change)
+}
+function setPayment(p){payment=p;byId("payQRIS").classList.toggle("active",p==="QRIS");byId("payCash").classList.toggle("active",p==="Cash");}
+async function checkout(){if(!supabaseClient)return alert("Supabase belum tersambung");if(!cart.length)return alert("Order kosong");const t=totals();const now=new Date();const paid = Number(byId("cashPaidInput")?.value||0);
+const change = payment==="Cash" ? Math.max(0, paid - t.total) : 0;
+if(payment==="Cash" && paid < t.total) return alert("Uang customer kurang bro.");
+const order={date:today(),time:now.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}),payment,paid,change,items:JSON.parse(JSON.stringify(cart)),total:t.total,profit:t.profit,cups:t.cups};const {data,error}=await supabaseClient.from("orders").insert([order]).select().single();if(error)return alert("Error checkout: "+error.message);const stockErr=await deductStock(cart, data.id);if(stockErr)return alert("Order masuk, tapi stok error: "+stockErr);lastOrder=data;cart=[];renderCart();alert("Order masuk & stok otomatis kepotong bro.");}
+async function deductStock(cartItems, orderId){for(const item of cartItems){const recs=recipes.filter(r=>Number(r.menu_id)===Number(item.id));for(const rec of recs){const st=stockItems.find(s=>Number(s.id)===Number(rec.stock_item_id));if(!st)continue;const used=Number(rec.qty_per_cup)*Number(item.qty);const newQty=Number(st.qty||0)-used;let {error}=await supabaseClient.from("stock_items").update({qty:newQty}).eq("id",st.id);if(error)return error.message;await supabaseClient.from("stock_moves").insert([{item_id:st.id,item_name:st.name,type:"out",qty:used,note:"Auto POS "+shortId(orderId)+" - "+item.name}]);}}return null;}
+function selectedDateOrders(){const d=byId("selectedDate").value||today();return orders.filter(o=>o.date===d)}
+function renderStats(){const os=selectedDateOrders();const omzet=os.reduce((s,o)=>s+Number(o.total||0),0),profit=os.reduce((s,o)=>s+Number(o.profit||0),0),cups=os.reduce((s,o)=>s+Number(o.cups||0),0);const count={};os.forEach(o=>(o.items||[]).forEach(i=>count[i.name]=(count[i.name]||0)+i.qty));byId("statOmzet").textContent=rupiah(omzet);byId("statProfit").textContent=rupiah(profit);byId("statCup").textContent=cups+" Cup";byId("statBest").textContent=Object.entries(count).sort((a,b)=>b[1]-a[1])[0]?.[0]||"Belum ada";}
+function renderRecap(){const os=selectedDateOrders(),tb=byId("recap");tb.innerHTML="";if(!os.length){tb.innerHTML='<tr><td colspan="8" class="empty">Belum ada transaksi.</td></tr>';return}os.forEach(o=>{const tr=document.createElement("tr");tr.innerHTML='<td><b>'+shortId(o.id)+'</b></td><td>'+o.time+'</td><td>'+o.cups+'</td><td>'+o.payment+'</td><td>'+rupiah(o.total)+'</td><td>'+rupiah(o.profit)+'</td><td><button class="smallbtn print-order">Print</button></td><td><button class="deletebtn delete-order">Hapus</button></td>';tr.querySelector(".print-order").onclick=()=>printOrder(o);tr.querySelector(".delete-order").onclick=()=>deleteOrder(o);tb.appendChild(tr)})}
+async function deleteOrder(o){if(confirm("Hapus transaksi "+shortId(o.id)+"? Stok TIDAK otomatis balik.")){const {error}=await supabaseClient.from("orders").delete().eq("id",o.id);if(error)alert(error.message);else alert("Transaksi dihapus. Kalau mau balikin stok, update manual di Stock Management.")}}
+async function resetSelectedDateOrders(){const d=byId("selectedDate").value||today();if(confirm("Hapus semua transaksi tanggal "+d+"? Stok tidak otomatis balik.")){const {error}=await supabaseClient.from("orders").delete().eq("date",d);if(error)alert(error.message)}}
+function printOrder(o){
+const bayar = o.payment==="Cash" ? "\nBAYAR: "+rupiah(o.paid||0)+"\nKEMBALIAN: "+rupiah(o.change||0) : "";
+const w=window.open("","_blank","width=320,height=600");
+w.document.write("<pre>SOUTH SIDE\n"+shortId(o.id)+"\nPAYMENT: "+o.payment+"\nTOTAL: "+rupiah(o.total)+bayar+"</pre><script>window.print()<\\/script>");
+w.document.close()
+}
+function printLast(){if(!lastOrder)return alert("Belum ada struk terakhir");printOrder(lastOrder)}
+function exportCSV(){const rows=[["ID","Tanggal","Jam","Cup","Payment","Total","Profit"]].concat(selectedDateOrders().map(o=>[shortId(o.id),o.date,o.time,o.cups,o.payment,o.total,o.profit]));const csv=rows.map(r=>r.join(",")).join("\\n");const blob=new Blob([csv],{type:"text/csv"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="rekap-pos-auto-stock.csv";a.click();URL.revokeObjectURL(url)}
+document.addEventListener("DOMContentLoaded",setup);
+</script>
+</body></html>
