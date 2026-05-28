@@ -1,0 +1,1 @@
+console.log("South Side POS Ready");
